@@ -1,58 +1,91 @@
-   body {
-            font-family: Arial, sans-serif;
+body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #f0f2f5;
         }
         .invoice-box {
             max-width: 800px;
             margin: auto;
             padding: 30px;
-            border: 1px solid #eee;
+            border-radius: 10px;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
         .invoice-header {
             text-align: right;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .invoice-header h1 {
+            color: #4CAF50;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .invoice-header p {
+            color: #555;
+            font-size: 1em;
         }
         table {
             width: 100%;
-            line-height: 1.5;
-            text-align: left;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
         table th, table td {
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
         }
         table th {
-            background-color: #f2f2f2;
-        }
-        .total-row {
-            text-align: right;
-        }
-        .total-row input {
-            border: none;
+            background-color: #f9f9f9;
             font-weight: bold;
-            text-align: right;
-            background-color: #fff;
+            color: #333;
+        }
+        table input[type="text"], table input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        table input[type="text"][readonly] {
+            background-color: #f9f9f9;
+            border: none;
         }
         .add-product {
-            margin-top: 15px;
             text-align: left;
+            margin-top: 20px;
         }
         .add-product button {
-            padding: 10px;
             background-color: #4CAF50;
             color: white;
+            padding: 10px 20px;
+            font-size: 1em;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         .add-product button:hover {
             background-color: #45a049;
         }
-        .total-amount {
+        .total-row {
+            text-align: right;
+        }
+        .total-row td {
             font-weight: bold;
             font-size: 1.2em;
+        }
+        .total-row input {
+            border: none;
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 10px;
+            width: 100px;
+            text-align: right;
+            font-size: 1.2em;
             color: #333;
+        }
+        .total-row input[readonly] {
+            background-color: #f9f9f9;
+            border: none;
         }
