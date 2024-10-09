@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Template</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .invoice-header {
+            text-align: right;
+            margin-bottom: 30px;
+        }
+        .invoice-header h1 {
+            color: #4CAF50;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .invoice-header p {
+            color: #555;
+            font-size: 1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            color: #333;
+        }
+        table input[type="text"], table input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        table input[type="text"][readonly] {
+            background-color: #f9f9f9;
+            border: none;
+        }
+        .add-product {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .add-product button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-product button:hover {
+            background-color: #45a049;
+        }
+        .total-row {
+            text-align: right;
+        }
+        .total-row td {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .total-row input {
+            border: none;
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 10px;
+            width: 100px;
+            text-align: right;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .total-row input[readonly] {
+            background-color: #f9f9f9;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="invoice-box">
+    <div class="invoice-header">
+        <h1>INVOICE</h1>
+        <p>Invoice No.: <strong>002</strong><br>
+        Issue Date: <strong>Aug 30, 2016</strong><br>
+        Due Date: <strong>Sep 13, 2016</strong></p>
+    </div>
+
+    <form method="POST" action="/">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>DESCRIPTION</th>
+                <th>QUANTITY</th>
+                <th>UNIT PRICE (EUR)</th>
+                <th>AMOUNT (EUR)</th>
+            </tr>
+            <tbody id="product-rows">
+               
+                <tr>
+                    <td><input type="text" name="description[]" value="{{ description }}"></td>
+                    <td><input type="number" name="quantity[]" min="1" value="{{ quantity }}"></td>
+                    <td><input type="number" name="unit_price[]" min="0" value="{{ unit_price }}"></td>
+                    <td><input type="text" name="amount[]" readonly value="{{ amount }}"></td>
+                </tr>
+    
+                <tr>
+                    <td><input type="text" name="description[]" placeholder="Enter product description"></td>
+                    <td><input type="number" name="quantity[]" min="1" value="1"></td>
+                    <td><input type="number" name="unit_price[]" min="0" value="0"></td>
+                    <td><input type="text" name="amount[]" readonly value="0.00"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="add-product">
+            <button type="submit">Calculate Total</button>
+        </div>
+    </form>
+
+    <table>
+        <tr class="total-row">
+            <td colspan="3">TOTAL (EUR):</td>
+            <td><input type="text" id="total-amount" readonly value="{{ total_amount }}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
