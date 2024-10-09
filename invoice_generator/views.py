@@ -1,35 +1,44 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from invoice_generator.models import Invoice,InvoiceItem
 
 # Create your views here.
 
 
 def index(request):
-    if request.method == 'POST':
-        descriptions = request.POST.getlist('description[]')
-        quantities = request.POST.getlist('quantity[]')
-        unit_prices = request.POST.getlist('unit_price[]')
 
-        # Calculate amounts and total
-        amounts = []
-        total_amount = 0
-        for qty, price in zip(quantities, unit_prices):
-            amount = float(qty) * float(price)
-            amounts.append(f'{amount:.2f}')
-            total_amount += amount
-        
-        return render(request, 'invoice.html', {
-            'descriptions': descriptions,
-            'quantities': quantities,
-            'unit_prices': unit_prices,
-            'amounts': amounts,
-            'total_amount': f'{total_amount:.2f}'
-        })
+    itemList= Invoice.objects.all()
+
+    return render(request, 'invoice.html', {'itemList' : itemList})
+
+
+def itemList(request):
     
-    # For GET request
-    return render(request, 'invoice.html', {
-        'descriptions': [],
-        'quantities': [],
-        'unit_prices': [],
-        'amounts': [],
-        'total_amount': '0.00'
-    })
+    if request.method == 'POST':
+        total_amount = 0
+        itemList = []
+
+        # Assuming you have a way to determine how many items were submitted
+        item_count = request.POST.get('item_count', 0)
+
+        for i in range(1, int(item_count) + 1):
+            description = request.POST.get(f'description_{i}')
+            quantity = int(request.POST.get(f'quantity_{i}', 0))
+            unit_price = float(request.POST.get(f'unit_price_{i}', 0))
+
+            # Calculate the amount
+            amount = quantity * unit_price
+            total_amount += amount
+
+            # Create an InvoiceItem instance (if needed)
+            itemList.append({
+                'description': description,
+                'quantity': quantity,
+                'unit_price': unit_price,
+                'amount': amount
+            })
+
+        return render(request, 'invoice.html', {'itemList': itemList, 'total_amount': total_amount})
+
+    # Render the invoice form initially
+    itemList = []  # Initial empty item list
+    return render(request, 'invoice.html', {'itemList': itemList, 'total_amount': 0})
