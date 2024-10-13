@@ -5,115 +5,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Template</title>
-    {% comment %} <link rel="stylesheet" type="css" href="{% static 'invoice.css' %}"> {% endcomment %}
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        padding: 20px;
-        background-color: #f0f2f5;
-    }
-    .invoice-box {
-        max-width: 800px;
-        margin: auto;
-        padding: 30px;
-        border-radius: 10px;
-        background-color: #fff;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
-    .invoice-header {
-        text-align: right;
-        margin-bottom: 30px;
-    }
-    .invoice-header h1 {
-        color: #4CAF50;
-        font-size: 2em;
-        margin-bottom: 5px;
-    }
-    .invoice-header p {
-        color: #555;
-        font-size: 1em;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-    table th, table td {
-        padding: 15px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-    table th {
-        background-color: #f9f9f9;
-        font-weight: bold;
-        color: #333;
-    }
-    table input[type="text"], table input[type="number"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1em;
-        box-sizing: border-box;
-    }
-    table input[type="text"][readonly] {
-        background-color: #f9f9f9;
-        border: none;
-    }
-    .add-product {
-        text-align: left;
-        margin-top: 20px;
-    }
-    .add-product button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        font-size: 1em;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    .add-product button:hover {
-        background-color: #45a049;
-    }
-    .total-row {
-        text-align: right;
-    }
-    .total-row td {
-        font-weight: bold;
-        font-size: 1.2em;
-    }
-    .total-row input {
-        border: none;
-        font-weight: bold;
-        background-color: #f0f0f0;
-        padding: 10px;
-        width: 100px;
-        text-align: right;
-        font-size: 1.2em;
-        color: #333;
-    }
-    .total-row input[readonly] {
-        background-color: #f9f9f9;
-        border: none;
-    }
-</style>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        .customer-section {
+            width: 48%;
+        }
 
-    
-
+        .invoice-section {
+            width: 48%
+                padding: 10;
+        }
+        h1 {
+            font-size: 1.8em;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1em;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            color: #333;
+        }
+        table input[type="text"], table input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        table input[type="text"][readonly] {
+            background-color: #f9f9f9;
+            border: none;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .total-row {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .total-row input {
+            background-color: #f9f9f9;
+            border: none;
+            text-align: right;
+            font-weight: bold;
+            padding: 10px;
+            font-size: 1.2em;
+        }
+    </style>
 </head>
 <body>
 
-<div class="invoice-box">
-    <div class="invoice-header">
-        <h1>INVOICE</h1>
-        <p>Invoice No.: <strong></strong><br>
-        Issue Date: <strong></strong><br>
-        Due Date: <strong></strong></p>
+<div class="invoice-container">
+    <div class="flex-container">
+        <!-- Customer Info Section (Left Side) -->
+        <div class="customer-section">
+
+            {% for customer in customers %}
+
+            <h2>CUSTOMER INFO</h2>
+
+            <p> <strong> Name:    </strong> {{customer.custmer_name}} <br>
+                <strong> Phone:   </strong> {{customer.custmer_phone}} <br>
+                <strong> Address: </strong> {{customer.custmer_address}} <br>
+                <strong> Email:   </strong> {{customer.custmer_email}} <br>
+            </p>
+            
+
+            {% endfor %}
+        </div>
+
+        <!-- Invoice Info Section (Right Side) -->
+        <div class="invoice-section">
+
+            {% for item in itemList %}
+
+            <h1>INVOICE</h1>
+            <p>
+                <strong>    Invoice No.:    </strong>   {{ item.invoice_number }}<br>
+                <strong>    Issue Date: </strong>       {{ item.issue_date }}<br>
+                <strong>    Due Date:   </strong>       {{ item.due_date }}<br>
+            </p>
+
+            {% endfor %}
+            
+        </div>
     </div>
 
-    <form method="POST" action="/">
+    <!-- Products Section -->
+    <form method="post" action="{% url 'add_product' %}">
+
         {% csrf_token %}
         <table>
             <tr>
@@ -121,28 +144,46 @@
                 <th>QUANTITY</th>
                 <th>UNIT PRICE</th>
                 <th>AMOUNT</th>
+                <th>ACTION</th>
             </tr>
 
             <tbody id="product-rows">
 
-            {% for item in itemList %}
-            <tr>
-                <td><input type="text" name="description_{{ forloop.counter }}" value="{{ item.description }}"></td>
-                <td><input type="number" name="quantity_{{ forloop.counter }}" min="1" value="{{ item.quantity }}"></td>
-                <td><input type="number" name="unit_price_{{ forloop.counter }}" min="0" value="{{ item.unit_price }}"></td>
-                <td><input type="text" name="amount_{{ forloop.counter }}" readonly value="{{ item.amount }}"></td>
-            </tr>
-            {% endfor %}
+
+                <tr>
+                    <td><input   type= "text"      name= "product"       ></td>
+                    <td><input   type= "number"    name= "quantity"      ></td>
+                    <td><input   type= "number"    name= "unit_ptice"    ></td>
+                    <td><input   type= "number"    name= "amount"        ></td>
+                    <td><button  type= "submit"    >Add</button></td>
+                </tr>
+
 
             </tbody>
 
+
+            <tbody>
+                {% for product in Products %}
+                <tr>
+                    <td>{{ product.product }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.unit_price }}</td>  <!-- Corrected from 'unit_ptice' -->
+                    <td>{{ product.amount }}</td>
+                    <td><button type="button">Remove</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            
+
         </table>
 
-        <div class="add-product">
-            <button type="submit">Calculate Total</button>
+        <!-- Submit Button -->
+        <div>
+            <button type="submit" class="button">Calculate Total</button>
         </div>
     </form>
 
+    <!-- Total Amount Section -->
     <table>
         <tr class="total-row">
             <td colspan="3">TOTAL (TAKA):</td>
