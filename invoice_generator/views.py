@@ -1,81 +1,83 @@
 from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required
 from invoice_generator.models import Invoice,InvoiceItem,CustmerInvoiceInfo
+from django.db.models import Sum  
+from django.template.loader import get_template
+from weasyprint import HTML
+import tempfile
 
-# Create your views here.
 
 
+
+
+
+@login_required(login_url='login')
 def index(request):
+ 
+        # Fetch all customers, invoices, and products
+        itemList = Invoice.objects.all()    
+        customers = CustmerInvoiceInfo.objects.all()
+        Products = InvoiceItem.objects.all()  # Fetch all products
 
-    itemList = Invoice.objects.all()    
-    customers = CustmerInvoiceInfo.objects.all()
-    products = InvoiceItem.objects.all()
-    context = {
-        'customers': customers,
-        'itemList': itemList,
-        'prosucts': products
-        #'total_amount': sum(item.amount for item in itemList)  # Assuming you want total calculation
-    }
+        # Calculate the total amount by summing the 'amount' field of all products
+        total_amount = Products.aggregate(Sum('amount'))['amount__sum'] or 0.0
 
-    return render(request, 'invoice.html', context)
+        context = {
+            'customers': customers,
+            'itemList': itemList,
+            'Products': Products,  # Use the correct variable name
+            'total_amount': total_amount  # Pass the total amount to the template
+        }
+
+        return render(request, 'invoice.html', context)
+
+        with tempfile.NamedTemporaryFile(delete=True) as tmpfile:
+            HTML(string=html).write_pdf(target=tmpfile.name)
+            with open(tmpfile.name, 'rb') as pdf_file:
+                response.write(pdf_file.read())
+
+        return response
 
 
+
+
+
+
+
+@login_required(login_url='login')
 def add_product(request):
 
     if request.method == "POST":
-
-        product_name = request.POST.get('product')
+        product = request.POST.get('product')
         quantity = request.POST.get('quantity')
         unit_price = request.POST.get('unit_price')
 
-        # Ensure data is being passed correctly
-        if product_name and quantity and unit_price:
-            
+        if product and quantity and unit_price:
             quantity = int(quantity)
             unit_price = float(unit_price)
             amount = quantity * unit_price
 
-            # Create a new product and save to database
+            # Create a new product and save it to the database
             new_product = InvoiceItem(
-                product=product_name,
-                quantity=quantity,
-                unit_price=unit_price,
-                amount=amount
+                product     = product,
+                quantity    = quantity,
+                unit_price  = unit_price,
+                amount      = amount 
             )
             new_product.save()
-        return redirect('index')  # Replace with the name of your success page
+
+        return redirect('index')
 
     return render(request, 'invoice.html')
 
 
 
-# def itemList(request):
-    
-#     if request.method == 'POST':
-#         total_amount = 0
-#         itemList = []
 
-#         # Assuming you have a way to determine how many items were submitted
-#         item_count = request.POST.get('item_count', 0)
 
-#         for i in range(1, int(item_count) + 1):
-#             description = request.POST.get(f'description_{i}')
-#             quantity = int(request.POST.get(f'quantity_{i}', 0))
-#             unit_price = float(request.POST.get(f'unit_price_{i}', 0))
+@login_required(login_url='login')
+def remove_product(request, id):
 
-#             # Calculate the amount
-#             amount = quantity * unit_price
-#             total_amount += amount
+    rm = InvoiceItem.objects.get(id=id)
+    rm.delete()
 
-#             # Create an InvoiceItem instance (if needed)
-#             itemList.append({
-#                 'description': description,
-#                 'quantity': quantity,
-#                 'unit_price': unit_price,
-#                 'amount': amount
-#             })
-
-#         return render(request, 'invoice.html', {'itemList': itemList, 'total_amount': total_amount})
-
-#     # Render the invoice form initially
-#     itemList = []  # Initial empty item list
-#     return render(request, 'invoice.html', {'itemList': itemList, 'total_amount': 0})
+    return redirect('index')

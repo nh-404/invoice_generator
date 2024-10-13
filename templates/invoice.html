@@ -9,7 +9,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
-            background-color: #f0f2f5;
+            background-color: black
         }
         .invoice-container {
             max-width: 800px;
@@ -59,8 +59,8 @@
         table input[type="text"], table input[type="number"] {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
             font-size: 1em;
         }
         table input[type="text"][readonly] {
@@ -78,10 +78,36 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
+        .btn_remove{
+            display: inline-block;
+            padding: 5px 10px;
+            font-size: 1em;
+            color: white;
+            background-color: red;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button_add {
+            display: inline-block;
+            padding: 8px 30px;
+            font-size: 1em;
+            color: white;
+            background-color: gray;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
         .button:hover {
             background-color: #45a049;
         }
         .total-row {
+            background-color: #4CAF50;
             text-align: right;
             font-weight: bold;
             font-size: 1.2em;
@@ -124,7 +150,7 @@
 
             <h1>INVOICE</h1>
             <p>
-                <strong>    Invoice No.:    </strong>   {{ item.invoice_number }}<br>
+                <strong>    Invoice No.:    </strong>   {{ item.id }}<br>
                 <strong>    Issue Date: </strong>       {{ item.issue_date }}<br>
                 <strong>    Due Date:   </strong>       {{ item.due_date }}<br>
             </p>
@@ -140,37 +166,43 @@
         {% csrf_token %}
         <table>
             <tr>
+
+                <th>No.</th>
                 <th>PRODUCT</th>
                 <th>QUANTITY</th>
                 <th>UNIT PRICE</th>
-                <th>AMOUNT</th>
                 <th>ACTION</th>
+                <th>AMOUNT</th>
             </tr>
 
             <tbody id="product-rows">
 
 
                 <tr>
+                <td></td>
                     <td><input   type= "text"      name= "product"       ></td>
                     <td><input   type= "number"    name= "quantity"      ></td>
-                    <td><input   type= "number"    name= "unit_ptice"    ></td>
-                    <td><input   type= "number"    name= "amount"        ></td>
-                    <td><button  type= "submit"    >Add</button></td>
+                    <td><input   type= "number"    name= "unit_price"    ></td>
+                    <td><button  type= "submit"  class="button_add"  >Add</button></td>
                 </tr>
 
 
             </tbody>
 
-
             <tbody>
                 {% for product in Products %}
-                <tr>
-                    <td>{{ product.product }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>{{ product.unit_price }}</td>  <!-- Corrected from 'unit_ptice' -->
-                    <td>{{ product.amount }}</td>
-                    <td><button type="button">Remove</button></td>
-                </tr>
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.product }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.unit_price }}</td>
+                        <td>
+                            <a href="{% url 'remove' product.id %}">
+                                <button type="button" class="btn_remove">Remove</button>
+                            </a>
+                        </td>
+                        <td><strong>{{ product.amount }}</strong></td>
+                    </tr>
                 {% endfor %}
             </tbody>
             
@@ -178,17 +210,17 @@
         </table>
 
         <!-- Submit Button -->
-        <div>
-            <button type="submit" class="button">Calculate Total</button>
-        </div>
+
     </form>
 
     <!-- Total Amount Section -->
     <table>
+
         <tr class="total-row">
-            <td colspan="3">TOTAL (TAKA):</td>
+            <td colspan="3">TOTAL AMOUNT:</td>
             <td><input type="text" id="total-amount" readonly value="{{ total_amount|floatformat:2 }}"></td>
         </tr>
+
     </table>
 </div>
 

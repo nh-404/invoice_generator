@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("/static/img/bg1.jpg") ;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .navbar {
+    width: 100%;
+    background-color: #343a40;
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+  }
+
+  .navbar .container-md {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .navbar .navbar-brand {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin-right: 20px;
+  }
+
+  .login-container {
+    background-color:transparent;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: left;
+    margin-top: 60px; /* To avoid overlap with the navbar */
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }

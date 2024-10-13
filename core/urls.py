@@ -5,8 +5,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', include('authentication.urls')),  # Added a trailing slash
-    path('', include('invoice_generator.urls')),
+    path('', include('authentication.urls')),  # Added a trailing slash
+    path('invoice/', include('invoice_generator.urls')),
 ]
 
 # Serve static files in development
