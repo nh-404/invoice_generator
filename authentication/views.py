@@ -11,9 +11,10 @@ def signUp(request):
 
         username = request.POST.get('username')
         email = request.POST.get('email')
+        org = request.POST.get('org')
         password = request.POST.get('password')
 
-        newUser = User.objects.create_user(username=username, email=email, password=password)
+        newUser = User.objects.create_user(username=username, email=email, password=password, org=org)
         newUser.save()
 
         return redirect('login')

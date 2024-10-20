@@ -4,58 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Invoice Template</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
-            background-color: black
+            background-color: #f4f4f4;
         }
+    
         .invoice-container {
-            max-width: 800px;
+            max-width: 100%;
             margin: auto;
             padding: 30px;
             border-radius: 10px;
             background-color: #fff;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
+    
         .flex-container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             margin-bottom: 40px;
         }
-        .customer-section {
-            width: 48%;
-        }
-
+    
+        .customer-section,
         .invoice-section {
-            width: 48%
-                padding: 10;
+            width: 100%;
+            margin-bottom: 20px;
         }
+    
         h1 {
             font-size: 1.8em;
             color: #4CAF50;
             margin-bottom: 20px;
         }
+    
         p {
             font-size: 1em;
             color: #333;
         }
+    
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
+    
         table th, table td {
-            padding: 15px;
+            padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+    
         table th {
             background-color: #f9f9f9;
             font-weight: bold;
             color: #333;
         }
+    
         table input[type="text"], table input[type="number"] {
             width: 100%;
             padding: 10px;
@@ -63,11 +71,14 @@
             border-radius: 8px;
             font-size: 1em;
         }
+    
         table input[type="text"][readonly] {
             background-color: #f9f9f9;
             border: none;
         }
-        .button {
+    
+        .button,
+        .button_add {
             display: inline-block;
             padding: 10px 20px;
             font-size: 1em;
@@ -78,8 +89,8 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
-        .btn_remove{
+    
+        .btn_remove {
             display: inline-block;
             padding: 5px 10px;
             font-size: 1em;
@@ -90,28 +101,22 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
+    
         .button_add {
-            display: inline-block;
-            padding: 8px 30px;
-            font-size: 1em;
-            color: white;
             background-color: gray;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
         }
-
+    
         .button:hover {
             background-color: #45a049;
         }
+    
         .total-row {
             background-color: #4CAF50;
-            text-align: right;
             font-weight: bold;
             font-size: 1.2em;
+            text-align: right;
         }
+    
         .total-row input {
             background-color: #f9f9f9;
             border: none;
@@ -119,78 +124,130 @@
             font-weight: bold;
             padding: 10px;
             font-size: 1.2em;
+            width: 100%;
+        }
+    
+        /* Ensure the table scrolls horizontally on small devices */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    
+        /* Media Queries for Mobile Responsiveness */
+        @media (min-width: 768px) {
+            .customer-section,
+            .invoice-section {
+                width: 48%;
+            }
+        }
+    
+        @media (max-width: 767px) {
+            .total-row td {
+                text-align: center;
+            }
+    
+            .total-row input {
+                text-align: center;
+                font-size: 1.1em;
+            }
+    
+            .flex-container {
+                flex-direction: column;
+            }
+    
+            .table-responsive {
+                margin-bottom: 20px;
+            }
         }
     </style>
+    
 </head>
 <body>
 
+<!-- navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Accounting System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Invoices</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Transactions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Account Summary</a>
+            </li>
+            <span class="p-3"> Welcome, {{ user.username }}</span>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </a>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
 <div class="invoice-container">
     <div class="flex-container">
         <!-- Customer Info Section (Left Side) -->
         <div class="customer-section">
-
-            {% for customer in customers %}
-
             <h2>CUSTOMER INFO</h2>
-
-            <p> <strong> Name:    </strong> {{customer.custmer_name}} <br>
-                <strong> Phone:   </strong> {{customer.custmer_phone}} <br>
-                <strong> Address: </strong> {{customer.custmer_address}} <br>
-                <strong> Email:   </strong> {{customer.custmer_email}} <br>
+            {% for customer in customers %}
+            <p> 
+                <strong>Name:</strong> {{ customer.custmer_name }}<br>
+                <strong>Phone:</strong> {{ customer.custmer_phone }}<br>
+                <strong>Address:</strong> {{ customer.custmer_address }}<br>
+                <strong>Email:</strong> {{ customer.custmer_email }}<br>
             </p>
-            
-
             {% endfor %}
         </div>
 
         <!-- Invoice Info Section (Right Side) -->
         <div class="invoice-section">
-
-            {% for item in itemList %}
-
             <h1>INVOICE</h1>
+            {% for item in itemList %}
             <p>
-                <strong>    Invoice No.:    </strong>   {{ item.id }}<br>
-                <strong>    Issue Date: </strong>       {{ item.issue_date }}<br>
-                <strong>    Due Date:   </strong>       {{ item.due_date }}<br>
+                <strong>Organization:</strong><br>
+                <strong>Invoice No.:</strong> {{ item.id }}<br>
+                <strong>Issue Date:</strong> {{ item.issue_date }}<br>
+                <strong>Due Date:</strong> {{ item.due_date }}<br>
             </p>
-
             {% endfor %}
-            
         </div>
     </div>
 
     <!-- Products Section -->
     <form method="post" action="{% url 'add_product' %}">
-
         {% csrf_token %}
-        <table>
-            <tr>
-
-                <th>No.</th>
-                <th>PRODUCT</th>
-                <th>QUANTITY</th>
-                <th>UNIT PRICE</th>
-                <th>ACTION</th>
-                <th>AMOUNT</th>
-            </tr>
-
-            <tbody id="product-rows">
-
-
+        <div class="table-responsive">
+            <table>
                 <tr>
-                <td></td>
-                    <td><input   type= "text"      name= "product"       ></td>
-                    <td><input   type= "number"    name= "quantity"      ></td>
-                    <td><input   type= "number"    name= "unit_price"    ></td>
-                    <td><button  type= "submit"  class="button_add"  >Add</button></td>
+                    <th>No.</th>
+                    <th>PRODUCT</th>
+                    <th>QUANTITY</th>
+                    <th>UNIT PRICE</th>
+                    <th>ACTION</th>
+                    <th>AMOUNT</th>
                 </tr>
-
-
-            </tbody>
-
-            <tbody>
-                {% for product in Products %}
+                <tbody id="product-rows">
+                    <tr>
+                        <td></td>
+                        <td><input type="text" name="product"></td>
+                        <td><input type="number" name="quantity"></td>
+                        <td><input type="number" name="unit_price"></td>
+                        <td><button type="submit" class="button_add">Add</button></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    {% for product in Products %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ product.product }}</td>
@@ -203,25 +260,21 @@
                         </td>
                         <td><strong>{{ product.amount }}</strong></td>
                     </tr>
-                {% endfor %}
-            </tbody>
-            
-
-        </table>
-
-        <!-- Submit Button -->
-
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </form>
 
     <!-- Total Amount Section -->
-    <table>
-
-        <tr class="total-row">
-            <td colspan="3">TOTAL AMOUNT:</td>
-            <td><input type="text" id="total-amount" readonly value="{{ total_amount|floatformat:2 }}"></td>
-        </tr>
-
-    </table>
+    <div class="table-responsive">
+        <table>
+            <tr class="total-row">
+                <td colspan="3">TOTAL AMOUNT:</td>
+                <td><input type="text" id="total-amount" readonly value="{{ total_amount|floatformat:2 }}"></td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 </body>

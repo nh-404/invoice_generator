@@ -12,6 +12,7 @@ class CustmerInvoiceInfo(models.Model):
 
 
 class Invoice(models.Model):
+
     invoice_number = models.CharField(max_length=20)
     issue_date = models.DateField()
     due_date = models.DateField()
