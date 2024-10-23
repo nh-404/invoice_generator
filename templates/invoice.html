@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Invoice Template</title>
+    <title>Invoice</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -167,7 +167,7 @@
 
 <!-- navbar.html -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Accounting System</a>
+    <a class="navbar-brand" href="#">Invoice Generator</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -200,27 +200,51 @@
         <!-- Customer Info Section (Left Side) -->
         <div class="customer-section">
             <h2>CUSTOMER INFO</h2>
+            {% comment %} {% if customer %} {% endcomment %}
+
             {% for customer in customers %}
             <p> 
-                <strong>Name:</strong> {{ customer.custmer_name }}<br>
-                <strong>Phone:</strong> {{ customer.custmer_phone }}<br>
-                <strong>Address:</strong> {{ customer.custmer_address }}<br>
-                <strong>Email:</strong> {{ customer.custmer_email }}<br>
+                <strong>Name:</strong> {{ customer.customer_name }}<br>
+                <strong>Phone:</strong> {{ customer.customer_phone }}<br>
+                <strong>Address:</strong> {{ customer.customer_address }}<br>
+                <strong>Email:</strong> {{ customer.customer_email }}<br>
             </p>
             {% endfor %}
+            {% comment %} {% else %}
+            <p> 
+                <strong>Name:</strong> <br>
+                <strong>Phone:</strong> <br>
+                <strong>Address:</strong><br>
+                <strong>Email:</strong> <br>
+            </p>
+
+            {% endif %} {% endcomment %}
         </div>
 
         <!-- Invoice Info Section (Right Side) -->
         <div class="invoice-section">
             <h1>INVOICE</h1>
+
+        {% comment %} {% if invoice %} {% endcomment %}
             {% for item in itemList %}
             <p>
-                <strong>Organization:</strong><br>
+                <strong>Organization:</strong>Felizzzzzzzz Group<br>
                 <strong>Invoice No.:</strong> {{ item.id }}<br>
                 <strong>Issue Date:</strong> {{ item.issue_date }}<br>
                 <strong>Due Date:</strong> {{ item.due_date }}<br>
             </p>
             {% endfor %}
+            {% comment %} {% else %}
+
+            <p>
+                <strong>Organization:</strong><br>
+                <strong>Invoice No.:</strong> <br>
+                <strong>Issue Date:</strong> <br>
+                <strong>Due Date:</strong> <br>
+            </p>
+
+
+        {% endif %} {% endcomment %}
         </div>
     </div>
 

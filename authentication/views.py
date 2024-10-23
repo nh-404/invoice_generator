@@ -34,7 +34,7 @@ def singIn(request):
 
         if user is not None:
             login(request, user)
-            return redirect('index')  # Ensure 'index' is defined in your URLs
+            return redirect('customer_Info')  # Ensure 'index' is defined in your URLs
         else:
             messages.error(request, 'Invalid username or password')
             return redirect('login')
